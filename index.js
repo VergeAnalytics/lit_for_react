@@ -1,10 +1,15 @@
 import { html, render } from 'lit';
 
-const itemsToBuy = [ html`<li>Bananas</li>`, html`<li>Apples</li>`, html`<li>Oranges</li>`, html`<li>Grapes</li>` ];
-
+const disabled = false;
+const label = 'my label';
+const myclass = 'my-class';
+const value = 'my value';
 const element = html`
-  <h1>Things to buy:</h1>
-  <ol>${itemsToBuy}</ol>
-  `;
+  <label>${label}</label>
+  <input
+  ?disabled=${disabled}
+  class="static-class ${myclass}"
+  .value=${value}
+  />`;
 
 render(element, document.getElementById('root'));
