@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@lit/reactive-element": "^1.0.0",
+    "@web/dev-server": "^0.1.31",
+    "lit": "^2.0.0",
+    "lit-element": "^3.0.0",
+    "lit-html": "^2.0.0"
+  },
+  "scripts": {
+    "dev": "npx web-dev-server --node-resolve --watch --open"
+  }
+}
