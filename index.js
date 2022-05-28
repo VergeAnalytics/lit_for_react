@@ -7,6 +7,8 @@ const value = 'my value';
 const element = html`
   <label>${label}</label>
   <input
+  @click=${() => console.log('Clicked')}
+  @input=${(e) => console.log(e.target.value)}
   ?disabled=${disabled}
   class="static-class ${myclass}"
   .value=${value}
