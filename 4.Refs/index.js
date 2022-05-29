@@ -1,13 +1,19 @@
 import { LitElement, html } from 'lit';
 
 export class MyElement extends LitElement {
-	onButtonClick() {}
+	get inputEl() {
+		return this.renderRoot.querySelector('input');
+	}
+	onButtonClick() {
+		this.inputEl.focus();
+		console.log('focused');
+	}
 
 	render() {
 		return html`
       <input type="text">
       <br />
-      <button>
+      <button @click=${this.onButtonClick}>
         Click to focus on the input above!
       </button>
    `;
