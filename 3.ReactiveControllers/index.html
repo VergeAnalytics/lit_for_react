@@ -1,7 +1,23 @@
 <!doctype html>
 <head>
   <script type="module" src="./index.js"></script>
+  <script type="module" src="./Slot.js"></script>
 </head>
 <body>
   <my-element></my-element>
+  <hr/>
+  <my-article>This is an Example of Slot in components</my-article>
+  <hr/>
+  <my-multiple-article>
+    <header slot="headerChildren">
+        <h4>Header for a Article</h4>
+    </header>
+    <section slot="sectionChildren">
+        <ol>
+            <li>Header</li>
+            <li>Items</li>
+            <li>Description</li>
+        </ol>
+    </section>
+  </my-multiple-article>
 </body>
