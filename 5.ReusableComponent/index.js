@@ -19,7 +19,6 @@ export class MyElement extends LitElement {
 				step: this.step + 1
 			}
 		});
-		console.log(event);
 		this.dispatchEvent(event);
 	}
 
@@ -37,3 +36,29 @@ export class MyElement extends LitElement {
 }
 
 customElements.define('counter-button', MyElement);
+
+export class MyCounter extends LitElement {
+	static get properties() {
+		return {
+			count: { type: Number }
+		};
+	}
+	count = 0;
+
+	addToCounter(e) {
+		// Get step from detail of event or via @query
+		this.count += e.detail.step;
+	}
+
+	render() {
+		console.log(this.count);
+		return html`
+      <div @update-counter="${this.addToCounter}">
+        <h3>&Sigma; ${this.count}</h3>
+        <counter-button step="-1"></counter-button>
+        <counter-button step="1"></counter-button>
+      </div>
+    `;
+	}
+}
+customElements.define('my-counter', MyCounter);
