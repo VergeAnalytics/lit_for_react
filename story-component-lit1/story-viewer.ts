@@ -1,6 +1,6 @@
 import { LitElement, html, css, PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-// import { classMap } from 'lit/directives/class-map';
+import { classMap } from 'lit/directives/class-map.js';
 
 @customElement('story-viewer')
 export class StoryViewer extends LitElement {
@@ -35,7 +35,7 @@ export class StoryViewer extends LitElement {
   ::slotted(*){
     position: absolute;
     width:100%;
-    height:100%;
+    height:calc(100%-20px);
   }
   story-viewer{
     width: 400px;
@@ -51,6 +51,27 @@ export class StoryViewer extends LitElement {
   #next{
     right:0;
   }
+  #progress{
+    position: relative;
+    top: calc(100% - 20px);
+    height: 20px;
+    width: 50%;
+    margin: 0 auto;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-gap: 10px;
+    align-content: center;
+  }
+  #progress > div {
+    background: grey;
+    height: 4px;
+    transition: background 0.3s linear;
+    cursor: pointer;
+  }
+  #progress > div.watched {
+    background: white;
+  }
   `;
 
   render() {
@@ -63,6 +84,15 @@ export class StoryViewer extends LitElement {
     <svg id="next" viewBox="0 0 10 10" @click=${() => this.next()}>
       <path d="M 4 2 L 6 5 L 4 8" stroke="#fff" fill="none" />
     </svg>
+
+    <div id="progress">
+    ${Array.from(this.children).map((_, i)=>html`
+      <div
+      class=${classMap({watched:i <= this.index})}
+      @click=${()=>this.index = i}
+      ><div>`
+      )}
+    </div>
     `;
   }
 }
