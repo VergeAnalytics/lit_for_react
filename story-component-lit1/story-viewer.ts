@@ -20,22 +20,34 @@ export class StoryViewer extends LitElement {
 
   constructor(){
     super()
-    this.index = 0;
     new Hammer(this).on("pan", (e:HammerInput)=>this._panData = e)
+    this.index = 0;
+  }
+  firstUpdated(){
+    this.children[this._index].dispatchEvent(new CustomEvent('entered'))
   }
 
   update(changedProperties:PropertyValues){
     // Panning the input changes using hammerjs
     let {deltaX=0, isFinal =false} = this._panData;
-    if(!changedProperties.has("index") && isFinal){
+    if(!changedProperties.has("_index") && isFinal){
       deltaX > 0? this.previous(): this.next()
     }
-    deltaX = isFinal ? 0 : deltaX
-
     const width = this.clientWidth
+    const minScale = 0.0;
+
+    deltaX = (isFinal ? 0 : deltaX);
+
+    
     Array.from(this.children).forEach((el:Element, i)=>{
-      const x = (i-this._index) * width;
-      (el as HTMLElement).style.transform = `translate3d(${x}px,0.0)`;
+      const x = (i - this.index) * width + deltaX;
+
+      // Piecewise scale(deltaX), looks like: __/\__
+      const u = deltaX / width + (i - this.index);
+      const v = -Math.abs(u * (1 - minScale)) + 1;
+      const scale = Math.max(v, minScale);
+
+      (el as HTMLElement).style.transform = `translate3d(${x}px,0,0) scale(${scale})`;
     })
     super.update(changedProperties)
   }
@@ -43,7 +55,7 @@ export class StoryViewer extends LitElement {
 
   /* Next Story Card */
   next(){
-    this._index = Math.max(0, Math.min(this.children.length -1, this.index +1))
+    this.index = Math.max(0, Math.min(this.children.length -1, this.index +1))
   }
 
   /* Prev Story Card */

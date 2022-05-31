@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css, query } from "lit-element";
 import {customElement} from "lit/decorators.js"
 
 @customElement('story-card')
@@ -6,8 +6,16 @@ export class StoryCard extends LitElement{
     constructor(){
         super()
         this.addEventListener("entered", ()=>{
-            
+            if(this._slottedMedia){
+                this._slottedMedia.currentTime = 0
+                this._slottedMedia.play()
+            }
         })        
+        this.addEventListener("exited", ()=>{
+            if(this._slottedMedia){
+                this._slottedMedia.pause()
+            }
+        })
     }
 
 
@@ -37,6 +45,16 @@ export class StoryCard extends LitElement{
         margin:0;
     }
     `
+
+    private get _slottedMedia():HTMLMediaElement|null{
+        const el = this._mediaSlot && this._mediaSlot.assignedNodes()[0]
+        return el instanceof HTMLMediaElement ? el : null
+    }
+
+    @query("slot[name=media]")
+    private _mediaSlot!: HTMLSlotElement;
+
+    
     render(){
         return html`
         <div id="media">
