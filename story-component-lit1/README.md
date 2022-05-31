@@ -7,3 +7,6 @@ To start the development environment:
 ```bash
 npm run dev
 ```
+
+Reference 
+[link](https://github.com/PolymerLabs/story-viewer/blob/main/story-viewer.ts)
