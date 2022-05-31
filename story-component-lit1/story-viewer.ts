@@ -1,22 +1,49 @@
-import { LitElement, html, css, PropertyValues } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, html, css, PropertyValues } from 'lit-element';
+import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
+import "hammerjs";
 
 @customElement('story-viewer')
 export class StoryViewer extends LitElement {
+  @property() _index: number = 0;
+  get index(){
+    return this._index;
+  }
+  set index(value:number){
+    this.children[this._index].dispatchEvent(new CustomEvent('exited'))
+    this.children[value].dispatchEvent(new CustomEvent('entered'))
+    this._index = value
+  }
+
+  @state() _panData:{isFinal?: boolean, deltaX?: number} = {};
+  
+
+  constructor(){
+    super()
+    this.index = 0;
+    new Hammer(this).on("pan", (e:HammerInput)=>this._panData = e)
+  }
+
   update(changedProperties:PropertyValues){
+    // Panning the input changes using hammerjs
+    let {deltaX=0, isFinal =false} = this._panData;
+    if(!changedProperties.has("index") && isFinal){
+      deltaX > 0? this.previous(): this.next()
+    }
+    deltaX = isFinal ? 0 : deltaX
+
     const width = this.clientWidth
     Array.from(this.children).forEach((el:Element, i)=>{
-      const x = (i-this.index) * width;
+      const x = (i-this._index) * width;
       (el as HTMLElement).style.transform = `translate3d(${x}px,0.0)`;
     })
     super.update(changedProperties)
   }
-  @property({type:Number}) index: number=0;
+  
 
   /* Next Story Card */
   next(){
-    this.index = Math.max(0, Math.min(this.children.length -1, this.index +1))
+    this._index = Math.max(0, Math.min(this.children.length -1, this.index +1))
   }
 
   /* Prev Story Card */
@@ -36,6 +63,7 @@ export class StoryViewer extends LitElement {
     position: absolute;
     width:100%;
     height:calc(100%-20px);
+    transition: transform 0.35s ease-out;
   }
   story-viewer{
     width: 400px;

@@ -1,8 +1,16 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css } from "lit-element";
 import {customElement} from "lit/decorators.js"
 
 @customElement('story-card')
 export class StoryCard extends LitElement{
+    constructor(){
+        super()
+        this.addEventListener("entered", ()=>{
+            
+        })        
+    }
+
+
     static styles = css`
     #media {
         height:100%
